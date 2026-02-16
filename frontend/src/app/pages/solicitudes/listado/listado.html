@@ -1,0 +1,234 @@
+<div class="listado-container">
+  <!-- Toolbar Header -->
+  <mat-toolbar class="toolbar-header">
+    <h1 class="toolbar-title">Mesa de Ayuda</h1>
+    <div class="toolbar-spacer"></div>
+    
+    <!-- Información del Usuario -->
+    <div class="user-info">
+      <span class="user-name">{{ userName }}</span>
+      <span class="user-role">{{ userRole }}</span>
+    </div>
+
+    <!-- Menú de Usuario -->
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar sesión</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <!-- Contenido Principal -->
+  <div class="main-content">
+    <!-- Header con título y botón crear -->
+    <div class="header-section">
+      <div>
+        <h2>Mis Solicitudes</h2>
+        <p class="subtitle">Gestiona todas tus solicitudes de ayuda</p>
+      </div>
+      <button mat-raised-button color="primary" (click)="crearSolicitud()" class="btn-crear">
+        <mat-icon>add</mat-icon>
+        Nueva Solicitud
+      </button>
+    </div>
+
+    <!-- Sección de Filtros -->
+    <mat-card class="filters-card">
+      <mat-card-content>
+        <div class="filters-title">
+          <mat-icon>filter_list</mat-icon>
+          <h3>Filtros</h3>
+        </div>
+        
+        <div class="filters-grid">
+          <!-- Filtro por Título -->
+          <mat-form-field appearance="fill" class="filter-field">
+            <mat-label>Búsqueda por Título</mat-label>
+            <input matInput 
+              [(ngModel)]="filtroTitulo" 
+              (ngModelChange)="aplicarFiltros()"
+              placeholder="Ej: Problema con login">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <!-- Filtro por Estado -->
+          <mat-form-field appearance="fill" class="filter-field">
+            <mat-label>Estado</mat-label>
+            <mat-select [(ngModel)]="filtroEstado" (ngModelChange)="aplicarFiltros()">
+              <mat-option value="">Todos</mat-option>
+              <mat-option *ngFor="let estado of estados" [value]="estado">
+                {{ estado }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>expand_more</mat-icon>
+          </mat-form-field>
+
+          <!-- Filtro por Prioridad/Importancia -->
+          <mat-form-field appearance="fill" class="filter-field">
+            <mat-label>Importancia</mat-label>
+            <mat-select [(ngModel)]="filtroPrioridad" (ngModelChange)="aplicarFiltros()">
+              <mat-option value="">Todas</mat-option>
+              <mat-option *ngFor="let prioridad of prioridades" [value]="prioridad">
+                {{ prioridad }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>expand_more</mat-icon>
+          </mat-form-field>
+
+          <!-- Filtro Fecha Inicio -->
+          <mat-form-field appearance="fill" class="filter-field">
+            <mat-label>Desde</mat-label>
+            <input matInput 
+              [matDatepicker]="pickerInicio"
+              [(ngModel)]="filtroFechaInicio" 
+              (ngModelChange)="aplicarFiltros()"
+              readonly>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Filtro Fecha Fin -->
+          <mat-form-field appearance="fill" class="filter-field">
+            <mat-label>Hasta</mat-label>
+            <input matInput 
+              [matDatepicker]="pickerFin"
+              [(ngModel)]="filtroFechaFin" 
+              (ngModelChange)="aplicarFiltros()"
+              readonly>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFin></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Botón para limpiar filtros -->
+        <div class="filters-actions">
+          <button mat-stroked-button color="accent" (click)="limpiarFiltros()">
+            <mat-icon>clear</mat-icon>
+            Limpiar Filtros
+          </button>
+          <span class="results-count">
+            Mostrando {{ dataSource.data.length }} de {{ totalElementos }} solicitudes
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Cargando solicitudes...</p>
+    </div>
+
+    <!-- Sin permiso -->
+    <mat-card *ngIf="sinPermiso && !cargando" class="error-card">
+      <mat-card-content>
+        <mat-icon class="error-icon">lock</mat-icon>
+        <h3>Acceso Denegado</h3>
+        <p>No tienes permiso para ver las solicitudes. Intenta iniciar sesión nuevamente.</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tabla de Solicitudes -->
+    <mat-card *ngIf="!cargando && !sinPermiso" class="table-card">
+      <mat-card-content>
+        <div class="table-responsive">
+          <table mat-table [dataSource]="dataSource" class="solicitudes-table">
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let element">#{{ element.idSolicitud }}</td>
+            </ng-container>
+
+            <!-- Título Column -->
+            <ng-container matColumnDef="titulo">
+              <th mat-header-cell *matHeaderCellDef>Título</th>
+              <td mat-cell *matCellDef="let element">{{ element.titulo }}</td>
+            </ng-container>
+
+            <!-- Descripción Column -->
+            <ng-container matColumnDef="descripcion">
+              <th mat-header-cell *matHeaderCellDef>Descripción</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="descripcion-truncate">{{ element.descripcion }}</span>
+              </td>
+            </ng-container>
+
+            <!-- Prioridad Column -->
+            <ng-container matColumnDef="prioridad">
+              <th mat-header-cell *matHeaderCellDef>Prioridad</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-chip>{{ element.prioridad }}</mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Estado Column -->
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-chip>{{ element.estado }}</mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Solicitante Column -->
+            <ng-container matColumnDef="solicitanteId">
+              <th mat-header-cell *matHeaderCellDef>Solicitante</th>
+              <td mat-cell *matCellDef="let element">{{ element.solicitanteNombre || 'N/A' }}</td>
+            </ng-container>
+
+            <!-- Fecha Column -->
+            <ng-container matColumnDef="fechaCreacion">
+              <th mat-header-cell *matHeaderCellDef>Fecha Creación</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}
+              </td>
+            </ng-container>
+
+            <!-- Acciones Column -->
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let element" class="acciones-cell">
+                <button mat-icon-button color="primary" (click)="verDetalle(element.idSolicitud)" matTooltip="Ver detalle">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="accent" (click)="editar(element.idSolicitud)" matTooltip="Editar">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <!-- Header y Rows -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+
+        <!-- Paginator -->
+        <mat-paginator 
+          [length]="totalElementos"
+          [pageIndex]="paginaActual"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 25, 50]"
+          (page)="onPaginaChange($event)"
+          showFirstLastButtons>
+        </mat-paginator>
+
+        <!-- Sin resultados -->
+        <div *ngIf="dataSource.data.length === 0 && !cargando" class="empty-state">
+          <mat-icon>inbox</mat-icon>
+          <h3>No hay solicitudes</h3>
+          <p *ngIf="solicitudes.length === 0">No tienes solicitudes registradas. Crea una nueva para comenzar.</p>
+          <p *ngIf="solicitudes.length > 0">No hay solicitudes que coincidan con los filtros. Intenta cambiar los criterios de búsqueda.</p>
+          <button mat-raised-button color="primary" (click)="crearSolicitud()">
+            <mat-icon>add</mat-icon>
+            Crear Primera Solicitud
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

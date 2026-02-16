@@ -1,0 +1,139 @@
+<div class="detalle-container">
+  <!-- Toolbar -->
+  <mat-toolbar class="toolbar-header">
+    <button mat-icon-button (click)="volver()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="toolbar-title">Detalle de Solicitud</h1>
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="editar()" [disabled]="cargando || (!esSolicitante && !esOperador)" *ngIf="esSolicitante || esOperador">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Loading -->
+    <div *ngIf="cargando" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Cargando solicitud...</p>
+    </div>
+
+    <!-- Solicitud Details -->
+    <mat-card *ngIf="!cargando && solicitud" class="detail-card">
+      <!-- Header -->
+      <mat-card-header>
+        <div class="header-content">
+          <div>
+            <mat-card-title class="solicitud-id">#{{ solicitud.idSolicitud }} - {{ solicitud.titulo }}</mat-card-title>
+            <mat-card-subtitle>Solicitud de ayuda</mat-card-subtitle>
+          </div>
+          <div class="header-badges">
+            <mat-chip  selected>
+              {{ solicitud.prioridad }}
+            </mat-chip>
+            <mat-chip selected>
+              {{ solicitud.estado }}
+            </mat-chip>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <mat-divider></mat-divider>
+
+      <!-- Content -->
+      <mat-card-content>
+        <!-- Descripción -->
+        <div class="section">
+          <h3 class="section-title">Descripción</h3>
+          <p class="descripcion">{{ solicitud.descripcion }}</p>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Información General -->
+        <div class="section">
+          <h3 class="section-title">Información General</h3>
+          <div class="info-grid">
+            <!-- ID Solicitud -->
+            <div class="info-item">
+              <label>Solicitante:</label>
+              <span>{{ solicitud.solicitanteNombre }}</span>
+            </div>
+
+            <!-- Prioridad -->
+            <div class="info-item">
+              <label>Prioridad:</label>
+              <mat-chip selected>
+                {{ solicitud.prioridad }}
+              </mat-chip>
+            </div>
+
+            <!-- Estado -->
+            <div class="info-item">
+              <label>Estado:</label>
+              <mat-chip selected>
+                {{ solicitud.estado }}
+              </mat-chip>
+            </div>
+
+            <!-- Fecha Creación -->
+            <div class="info-item">
+              <label>Fecha de Creación:</label>
+              <span>{{ formatearFecha(solicitud.fechaCreacion) }}</span>
+            </div>
+
+            <!-- Fecha Actualización -->
+            <div class="info-item">
+              <label>Última Actualización:</label>
+              <span>{{ formatearFecha(solicitud.fechaActualizacion) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Acciones -->
+        <div class="actions">
+          <button mat-stroked-button (click)="volver()">
+            <mat-icon>arrow_back</mat-icon>
+            Volver al Listado
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="editar()" 
+            [disabled]="cargando || cambioEnProgreso || solicitud.estado === 'Cerrado' || (!esSolicitante && !esOperador)"
+            *ngIf="esSolicitante || esOperador">
+            <mat-icon>edit</mat-icon>
+            Editar Solicitud
+          </button>
+
+          <!-- Botones para Operadores -->
+          <ng-container *ngIf="esOperador && solicitud.estado !== 'Resuelto' && solicitud.estado !== 'Cerrado'">
+            <button 
+              mat-raised-button 
+              color="accent" 
+              (click)="abrirModalCambiarEstado('Resuelto')"
+              [disabled]="cargando || cambioEnProgreso">
+              <mat-icon>check_circle</mat-icon>
+              Marcar como Resuelto
+            </button>
+            <button 
+              mat-raised-button 
+              (click)="abrirModalCambiarEstado('Cerrado')"
+              [disabled]="cargando || cambioEnProgreso">
+              <mat-icon>close</mat-icon>
+              Cerrar Solicitud
+            </button>
+          </ng-container>
+
+          <!-- Mensaje si ya está resuelta/cerrada -->
+          <span *ngIf="solicitud.estado === 'Resuelto' || solicitud.estado === 'Cerrado'" class="estado-final">
+            Esta solicitud ya está {{ solicitud.estado | lowercase }}
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

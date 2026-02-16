@@ -1,0 +1,110 @@
+<div class="login-container">
+  <div class="login-wrapper">
+    <!-- Logo/Header -->
+    <div class="login-header">
+      <h1>Mesa de Ayuda</h1>
+      <br />
+      <p>Sistema de Gestión de Solicitudes</p>
+    </div>
+
+    <!-- Card Principal -->
+    <mat-card class="login-card">
+      <!-- Título -->
+      <mat-card-header>
+        <mat-card-title>Iniciar Sesión</mat-card-title>
+      </mat-card-header>
+
+      <!-- Contenido -->
+      <mat-card-content>
+        <!-- Formulario -->
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <!-- Email -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Correo Electrónico</mat-label>
+            <input
+              matInput
+              type="email"
+              formControlName="correo"
+              placeholder="tu@email.com"
+              [disabled]="cargando"
+            />
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="hasError('correo', 'required')">
+              El correo es requerido
+            </mat-error>
+            <mat-error *ngIf="hasError('correo', 'email')">
+              Por favor ingresa un correo válido
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Contraseña -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input
+              matInput
+              [type]="mostrarPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Ingresa tu contraseña"
+              [disabled]="cargando"
+            />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button
+              type="button"
+              mat-icon-button
+              matSuffix
+              (click)="toggleMostrarPassword()"
+              [disabled]="cargando"
+            >
+              <mat-icon>
+                {{ mostrarPassword ? 'visibility_off' : 'visibility' }}
+              </mat-icon>
+            </button>
+            <mat-error *ngIf="hasError('password', 'required')">
+              La contraseña es requerida
+            </mat-error>
+            <mat-error *ngIf="hasError('password', 'minlength')">
+              La contraseña debe tener al menos 6 caracteres
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Botón Login -->
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            class="login-button align-center"
+            [disabled]="cargando || loginForm.invalid"
+          >
+            <span *ngIf="!cargando">Ingresar</span>
+            <span *ngIf="cargando" class="loading-text">
+              <mat-spinner diameter="20" class="spinner"></mat-spinner>
+              Iniciando sesión...
+            </span>
+          </button>
+        </form>
+
+        <!-- Separador -->
+        <div class="divider">
+          <span>¿No tienes cuenta?</span>
+        </div>
+
+        <!-- Botón Registro -->
+        <button
+          type="button"
+          mat-stroked-button
+          color="accent"
+          class="register-button"
+          (click)="registrar()"
+          [disabled]="cargando"
+        >
+          Crear una nueva cuenta
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Footer -->
+    <div class="login-footer">
+      <p>&copy; 2026 Mesa de Ayuda Interna. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</div>

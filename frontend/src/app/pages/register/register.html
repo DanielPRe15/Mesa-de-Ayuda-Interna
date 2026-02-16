@@ -1,0 +1,178 @@
+<div class="register-container">
+  <div class="register-wrapper">
+    <!-- Logo/Header -->
+    <div class="register-header">
+      <h1>Mesa de Ayuda</h1>
+      <br />
+      <p>Crear una Nueva Cuenta</p>
+    </div>
+
+    <!-- Card Principal -->
+    <mat-card class="register-card">
+      <!-- Título -->
+      <mat-card-header>
+        <mat-card-title>Registro de Usuario</mat-card-title>
+      </mat-card-header>
+
+      <!-- Contenido -->
+      <mat-card-content>
+        <!-- Formulario -->
+        <form [formGroup]="registerForm" (ngSubmit)="register()">
+          <!-- Nombre Completo -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Nombre Completo</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="nombreCompleto"
+              placeholder="Tu nombre"
+              [disabled]="cargando"
+            />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="hasError('nombreCompleto', 'required')">
+              El nombre es requerido
+            </mat-error>
+            <mat-error *ngIf="hasError('nombreCompleto', 'minlength')">
+              El nombre debe tener al menos 3 caracteres
+            </mat-error>
+            <mat-error *ngIf="hasError('nombreCompleto', 'maxlength')">
+              El nombre no puede superar 100 caracteres
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Correo Electrónico -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Correo Electrónico</mat-label>
+            <input
+              matInput
+              type="email"
+              formControlName="correo"
+              placeholder="tu@email.com"
+              [disabled]="cargando"
+            />
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="hasError('correo', 'required')">
+              El correo es requerido
+            </mat-error>
+            <mat-error *ngIf="hasError('correo', 'email')">
+              Por favor ingresa un correo válido
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Contraseña -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input
+              matInput
+              [type]="mostrarPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Ingresa tu contraseña"
+              [disabled]="cargando"
+            />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button
+              type="button"
+              mat-icon-button
+              matSuffix
+              (click)="toggleMostrarPassword()"
+              [disabled]="cargando"
+            >
+              <mat-icon>
+                {{ mostrarPassword ? 'visibility_off' : 'visibility' }}
+              </mat-icon>
+            </button>
+            <mat-error *ngIf="hasError('password', 'required')">
+              La contraseña es requerida
+            </mat-error>
+            <mat-error *ngIf="hasError('password', 'minlength')">
+              La contraseña debe tener al menos 6 caracteres
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Confirmar Contraseña -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Confirmar Contraseña</mat-label>
+            <input
+              matInput
+              [type]="mostrarConfirmarPassword ? 'text' : 'password'"
+              formControlName="confirmarPassword"
+              placeholder="Repite tu contraseña"
+              [disabled]="cargando"
+            />
+            <mat-icon matPrefix>lock_outline</mat-icon>
+            <button
+              type="button"
+              mat-icon-button
+              matSuffix
+              (click)="toggleMostrarConfirmarPassword()"
+              [disabled]="cargando"
+            >
+              <mat-icon>
+                {{ mostrarConfirmarPassword ? 'visibility_off' : 'visibility' }}
+              </mat-icon>
+            </button>
+            <mat-error *ngIf="hasError('confirmarPassword', 'required')">
+              Debes confirmar tu contraseña
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Seleccionar Rol -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Selecciona tu Rol</mat-label>
+            <mat-select
+              formControlName="idRol"
+              [disabled]="cargando"
+            >
+              <mat-optgroup label="Disponibles">
+                <mat-option *ngFor="let rol of roles" [value]="rol.id">
+                  {{ rol.nombre }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+            <mat-icon matPrefix>assignment</mat-icon>
+            <mat-error *ngIf="hasError('idRol', 'required')">
+              Por favor selecciona un rol
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Botón Registro -->
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            class="register-button align-center"
+            [disabled]="cargando || registerForm.invalid"
+          >
+            <span *ngIf="!cargando">Crear Cuenta</span>
+            <span *ngIf="cargando" class="loading-text">
+              <mat-spinner diameter="20" class="spinner"></mat-spinner>
+              Registrando...
+            </span>
+          </button>
+        </form>
+
+        <!-- Separador -->
+        <div class="divider">
+          <span>¿Ya tienes cuenta?</span>
+        </div>
+
+        <!-- Botón Volver al Login -->
+        <button
+          type="button"
+          mat-stroked-button
+          color="accent"
+          class="login-button"
+          (click)="volver()"
+          [disabled]="cargando"
+        >
+          Volver al Inicio de Sesión
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Footer -->
+    <div class="register-footer">
+      <p>&copy; 2026 Mesa de Ayuda Interna. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</div>
