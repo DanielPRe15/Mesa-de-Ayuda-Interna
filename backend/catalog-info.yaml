@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mesa-ayuda-backend
+  description: API de gestión de mesa de ayuda desarrollada en Spring Boot
+  annotations:
+    github.com/project-slug: DanielPre15/Mesa-de-Ayuda-Interna
+spec:
+  type: service
+  lifecycle: experimental
+  owner: equipo-mesa-ayuda
+  system: mesa-ayuda
