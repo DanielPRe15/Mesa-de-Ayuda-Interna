@@ -7,6 +7,8 @@ metadata:
     github.com/project-slug: DanielPre15/Mesa-de-Ayuda-Interna
 spec:
   type: service
-  lifecycle: experimental
+  lifecycle: production
   owner: equipo-mesa-ayuda
   system: mesa-ayuda
+  dependsOn:
+    - resource:default/mesa-ayuda-db
