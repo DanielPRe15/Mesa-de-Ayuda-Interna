@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: mesa-ayuda-catalog
+  description: Catalog definitions for Mesa de Ayuda
+spec:
+  targets:
+    - ./catalog/group-equipo-mesa-ayuda.yaml
+    - ./catalog/system-mesa-ayuda.yaml
+    - ./backend/catalog-info.yaml
