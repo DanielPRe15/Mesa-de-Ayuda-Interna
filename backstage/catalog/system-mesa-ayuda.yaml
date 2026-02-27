@@ -1,0 +1,7 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: mesa-ayuda
+  description: Plataforma interna de gestión de tickets
+spec:
+  owner: equipo-mesa-ayuda
