@@ -1,7 +1,0 @@
-apiVersion: backstage.io/v1alpha1
-kind: System
-metadata:
-  name: mesa-ayuda
-  description: Sistema de gestión de solicitudes internas
-spec:
-  owner: equipo-mesa-ayuda
