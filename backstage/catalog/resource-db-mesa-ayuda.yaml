@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: mesa-ayuda-db
+  description: Base de datos SQL Server para la plataforma Mesa de Ayuda
+  annotations:
+    github.com/project-slug: DanielPre15/Mesa-de-Ayuda-Interna
+spec:
+  type: database
+  owner: equipo-mesa-ayuda
+  system: mesa-ayuda
