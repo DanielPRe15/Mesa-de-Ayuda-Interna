@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: equipo-mesa-ayuda
+  description: Equipo responsable del sistema Mesa de Ayuda
+spec:
+  type: team
+  profile:
+    displayName: Equipo Mesa de Ayuda
