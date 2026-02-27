@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mesa-ayuda-frontend
+  description: Frontend de la plataforma Mesa de Ayuda
+  annotations:
+    github.com/project-slug: DanielPre15/Mesa-de-Ayuda-Interna
+spec:
+  type: website
+  lifecycle: production
+  owner: equipo-mesa-ayuda
+  system: mesa-ayuda
