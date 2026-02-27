@@ -4,8 +4,8 @@ metadata:
   name: mesa-ayuda-location
 spec:
   targets:
-    - /backstage/catalog/group-equipo-mesa-ayuda.yaml
-    - /backstage/catalog/system-mesa-ayuda.yaml
+    - ./catalog/group-equipo-mesa-ayuda.yaml
+    - ./catalog/system-mesa-ayuda.yaml
     - ./catalog/resource-db-mesa-ayuda.yaml
     - ../backend/catalog-info.yaml
     - ../frontend/catalog-info.yaml
