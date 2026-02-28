@@ -8,3 +8,4 @@ spec:
   type: team
   profile:
     displayName: Equipo Mesa de Ayuda
+  children: []
