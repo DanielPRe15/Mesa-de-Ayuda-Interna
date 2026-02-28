@@ -1,6 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
+  namespace: default
   name: equipo-mesa-ayuda
   description: Equipo responsable del sistema Mesa de Ayuda
 spec:
