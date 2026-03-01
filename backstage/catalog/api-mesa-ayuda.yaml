@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: mesa-ayuda-api
+  description: API REST para gestión de solicitudes de soporte técnico
+  tags:
+    - rest
+    - spring-boot
+    - azure
+    - jwt
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:default/equipo-mesa-ayuda
+  system: system:default/mesa-ayuda
+  definition:
+    $text: https://raw.githubusercontent.com/DanielPRe15/Mesa-de-Ayuda-Interna/master/docs/openapi.yaml
