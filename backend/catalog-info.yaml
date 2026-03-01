@@ -5,6 +5,7 @@ metadata:
   description: API de gestión de mesa de ayuda desarrollada en Spring Boot
   annotations:
     github.com/project-slug: DanielPre15/Mesa-de-Ayuda-Interna
+    backstage.io/techdocs-ref: url:https://github.com/DanielPRe15/Mesa-de-Ayuda-Interna/tree/master
 spec:
   type: service
   lifecycle: production
