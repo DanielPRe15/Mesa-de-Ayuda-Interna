@@ -11,5 +11,7 @@ spec:
   lifecycle: production
   owner: equipo-mesa-ayuda
   system: mesa-ayuda
+  providesApis:
+    - mesa-ayuda-api
   dependsOn:
     - resource:default/mesa-ayuda-db
