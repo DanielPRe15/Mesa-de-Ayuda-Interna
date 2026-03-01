@@ -1,0 +1,11 @@
+site_name: Mesa de Ayuda - Documentación
+site_description: Documentación técnica del sistema de Mesa de Ayuda
+
+nav:
+  - Inicio: index.md
+  - Guía de Usuario: guia-usuario.md
+  - API Endpoints: api.md
+  - Arquitectura: arquitectura.md
+
+plugins:
+  - techdocs-core
